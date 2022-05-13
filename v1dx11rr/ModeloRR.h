@@ -410,10 +410,10 @@ public:
 
 		D3DXMATRIX traslacionDeCamara;
 		if (tipoCam == 1) {
-			D3DXMatrixTranslation(&traslacionDeCamara, -0.2, 0.0, -6.4);
+			D3DXMatrixTranslation(&traslacionDeCamara, -0.6, -2.6, -0.7);
 		}
 		else {
-			D3DXMatrixTranslation(&traslacionDeCamara, 0.0, 0.0, 0.0);
+			D3DXMatrixTranslation(&traslacionDeCamara, 0.0, -1.5, 6.0);
 		}
 
 		D3DXMATRIX rotationMat;

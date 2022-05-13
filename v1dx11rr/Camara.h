@@ -13,6 +13,7 @@ public:
 
 	D3DXVECTOR3 posCam;
 	D3DXVECTOR3 posCam3P;
+
 	D3DXVECTOR3 hdveo;
 	D3DXVECTOR3 hdvoy;
 	D3DXVECTOR3 refUp;
@@ -24,8 +25,6 @@ public:
 	int alto;
 
 	D3DXVECTOR3 pastPosCam;
-
-	int vida = 3;
 
 	float pos[2];
 
@@ -43,7 +42,8 @@ public:
 		posCam = eye;
 
 		posCam3P = eye;
-		posCam3P.z += 15;
+		posCam3P;
+
 		//a donde ve
 		hdveo = target;
 		refUp = up;
@@ -105,7 +105,7 @@ public:
 		
 
 		//ajustamos la matriz de vista con lo obtenido
-		posCam += refFront * vel/10.0;
+		posCam += refFront * vel / 10.0;
 		posCam3P += refFront * vel / 10.0;
 
 		if (tipoCam == 1) {

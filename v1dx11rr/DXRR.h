@@ -71,7 +71,12 @@ public:
 	CXACT3Util m_XACT3;
 
 	float rotCam;
+	bool interactua = 0;
 	int tipoCam;
+	bool vehiculo = 0;
+
+	int vida = 3;
+
 	
     DXRR(HWND hWnd, int Ancho, int Alto)
 	{
@@ -300,7 +305,7 @@ public:
 		d3dContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
 		
 		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 4.5 ;
-		camara->posCam3P.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 6;
+		camara->posCam3P.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 7;
 
 		camara->UpdateCam(vel, arriaba, izqder, tipoCam);
 		
@@ -327,15 +332,37 @@ public:
 
 		//TurnOffAlphaBlending();
 		botella->Draw(camara->vista, camara->proyeccion, terreno->Superficie(botella->getPosX(), botella->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
-		person->Draw(camara->vista, camara->proyeccion, terreno->Superficie(person->getPosX(), person->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		kit->Draw(camara->vista, camara->proyeccion, terreno->Superficie(kit->getPosX(), kit->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		tanque->Draw(camara->vista, camara->proyeccion, terreno->Superficie(tanque->getPosX(), tanque->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
-		jeep->Draw(camara->vista, camara->proyeccion, terreno->Superficie(jeep->getPosX(), jeep->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		elefante->Draw(camara->vista, camara->proyeccion, terreno->Superficie(elefante->getPosX(), elefante->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		tent->Draw(camara->vista, camara->proyeccion, terreno->Superficie(tent->getPosX(), tent->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		campaña->Draw(camara->vista, camara->proyeccion, terreno->Superficie(campaña->getPosX(), campaña->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		rhino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(rhino->getPosX(), rhino->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		serpiente->Draw(camara->vista, camara->proyeccion, terreno->Superficie(serpiente->getPosX(), serpiente->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+
+		if (!vehiculo) {
+
+			jeep->Draw(camara->vista, camara->proyeccion, terreno->Superficie(jeep->getPosX(), jeep->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+
+			if (isPointInsideSphere(camara->getPos(), jeep->getSphere(5))) {
+				camara->posCam = camara->pastPosCam;
+				if (interactua) {
+					vehiculo = 1;
+				}
+			}
+
+		}
+		else {
+
+			jeep->setPosX(camara->hdveo.x);
+			jeep->setPosZ(camara->hdveo.z);
+			jeep->Draw(camara->vista, camara->proyeccion,
+				terreno->Superficie(jeep->getPosX(), jeep->getPosZ()) + 2.5,
+				camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, true, tipoCam);
+
+		}
+
+		
 
 
 		//carro->setPosX(camara->hdveo.x);
@@ -344,17 +371,18 @@ public:
 		//	terreno->Superficie(carro->getPosX(), carro->getPosZ()) + 2.5,
 		//	camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, true, tipoCam);
 
-		if (camara->vida == 3) {
+		if (vida == 3) {
 			fullvida->Draw(-.8, .8);
 		} 
-		else if (camara->vida == 2) {
+		else if (vida == 2) {
 			halfvida->Draw(-.8, .8);
 		}
-		else if (camara->vida == 2) {
+		else if (vida == 1) {
 			lastvida->Draw(-.8, .8);
 		}
 
 		swapChain->Present( 1, 0 );
+		interactua = 0;
 	}
 
 	bool isPointInsideSphere(float* point, float* sphere) {

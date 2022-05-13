@@ -181,11 +181,21 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             m_pKeyboardDevice->GetDeviceState(sizeof(keyboardData), (void*)&keyboardData);
 
             if (keyboardData[DIK_S] & 0x80) {
-                dxrr->vel = -5.f;
+                if (!dxrr->vehiculo) {
+                    dxrr->vel = -3.f;
+                }
+                else {
+                    dxrr->vel = -6.f;
+                }
             }
 
             if (keyboardData[DIK_W] & 0x80) {
-                dxrr->vel = 5.f;
+                if (!dxrr->vehiculo) {
+                    dxrr->vel = 3.f;
+                }
+                else {
+                    dxrr->vel = 6.f;
+                }
             }
 
             if (keyboardData[DIK_B] & 0x80) {
@@ -194,12 +204,26 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
             }
 
             if (keyboardData[DIK_T] & 0x80) {
-                dxrr->tipoCam = 3;
+                if(dxrr->vehiculo)
+                    dxrr->tipoCam = 3;
             }
 
             if (keyboardData[DIK_P] & 0x80) {
-                dxrr->tipoCam = 1;
+                if(dxrr->vehiculo)
+                    dxrr->tipoCam = 1;
             }
+
+            if (keyboardData[DIK_E] & 0x80) {
+                dxrr->interactua = 1;
+            }
+
+            if (keyboardData[DIK_LSHIFT] & 0x80) {
+                if (dxrr->vehiculo) {
+                    dxrr->vehiculo = false;  
+                    dxrr->jeep->setPosX(dxrr->jeep->getPosX() + 6);
+                    dxrr->tipoCam = 1;
+                }
+            }          
 
             if (keyboardData[DIK_ESCAPE] & 0x80) {
                 KillTimer(hWnd, 100);
