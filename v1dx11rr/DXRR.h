@@ -50,9 +50,13 @@ public:
 	ModeloRR* tanque;
 	ModeloRR* jeep;
 	ModeloRR* elefante;
+	ModeloRR* tent;
 	ModeloRR* campaña;
-	GUI* vida;
-
+	ModeloRR* rhino;
+	ModeloRR* serpiente;
+	GUI* fullvida;
+	GUI* halfvida;
+	GUI* lastvida;
 	
 	float izqder;
 	float arriaba;
@@ -101,9 +105,14 @@ public:
 		tanque = new ModeloRR(d3dDevice, d3dContext, "Assets/Tanque/tanque.obj", L"Assets/Tanque/tanque.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -40);
 		jeep = new ModeloRR(d3dDevice, d3dContext, "Assets/Jeep/jeep.obj", L"Assets/Jeep/jeep.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -50);
 		elefante = new ModeloRR(d3dDevice, d3dContext, "Assets/Elefante/elefante.obj", L"Assets/Elefante/elefante.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -70);
+		tent = new ModeloRR(d3dDevice, d3dContext, "Assets/Tent/Tent.obj", L"Assets/Tent/Tent.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -35, -70);
 		campaña = new ModeloRR(d3dDevice, d3dContext, "Assets/Campaña/Campaña.obj", L"Assets/Campaña/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -90);
+		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -120);
+		serpiente = new ModeloRR(d3dDevice, d3dContext, "Assets/Serpiente/Serpiente.obj", L"Assets/Serpiente/Serpiente.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -120);
 
-		vida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_full.png");
+		fullvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_full.png");
+		halfvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_2.png");
+		lastvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_1.png");
 
 	}
 
@@ -295,9 +304,11 @@ public:
 
 		camara->UpdateCam(vel, arriaba, izqder, tipoCam);
 		
+		/*         COLISION
 		if (isPointInsideSphere(camara->getPos(), elefante->getSphere(17))) {
 			camara->posCam = camara->pastPosCam;
 		}
+		*/
 
 		skydome->Update(camara->vista, camara->proyeccion);
 
@@ -321,7 +332,10 @@ public:
 		tanque->Draw(camara->vista, camara->proyeccion, terreno->Superficie(tanque->getPosX(), tanque->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		jeep->Draw(camara->vista, camara->proyeccion, terreno->Superficie(jeep->getPosX(), jeep->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		elefante->Draw(camara->vista, camara->proyeccion, terreno->Superficie(elefante->getPosX(), elefante->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		tent->Draw(camara->vista, camara->proyeccion, terreno->Superficie(tent->getPosX(), tent->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		campaña->Draw(camara->vista, camara->proyeccion, terreno->Superficie(campaña->getPosX(), campaña->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		rhino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(rhino->getPosX(), rhino->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		serpiente->Draw(camara->vista, camara->proyeccion, terreno->Superficie(serpiente->getPosX(), serpiente->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 
 
 		//carro->setPosX(camara->hdveo.x);
@@ -330,7 +344,15 @@ public:
 		//	terreno->Superficie(carro->getPosX(), carro->getPosZ()) + 2.5,
 		//	camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, true, tipoCam);
 
-		vida->Draw(-.8, .8);
+		if (camara->vida == 3) {
+			fullvida->Draw(-.8, .8);
+		} 
+		else if (camara->vida == 2) {
+			halfvida->Draw(-.8, .8);
+		}
+		else if (camara->vida == 2) {
+			lastvida->Draw(-.8, .8);
+		}
 
 		swapChain->Present( 1, 0 );
 	}

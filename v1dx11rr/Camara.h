@@ -10,6 +10,7 @@
 
 class Camara{
 public:
+
 	D3DXVECTOR3 posCam;
 	D3DXVECTOR3 posCam3P;
 	D3DXVECTOR3 hdveo;
@@ -23,6 +24,8 @@ public:
 	int alto;
 
 	D3DXVECTOR3 pastPosCam;
+
+	int vida = 3;
 
 	float pos[2];
 
