@@ -54,6 +54,8 @@ public:
 	ModeloRR* campaña;
 	ModeloRR* rhino;
 	ModeloRR* serpiente;
+	ModeloRR* linterna;
+	ModeloRR* llanta;
 	GUI* fullvida;
 	GUI* halfvida;
 	GUI* lastvida;
@@ -114,6 +116,8 @@ public:
 		campaña = new ModeloRR(d3dDevice, d3dContext, "Assets/Campaña/Campaña.obj", L"Assets/Campaña/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -90);
 		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -120);
 		serpiente = new ModeloRR(d3dDevice, d3dContext, "Assets/Serpiente/Serpiente.obj", L"Assets/Serpiente/Serpiente.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -120);
+		linterna = new ModeloRR(d3dDevice, d3dContext, "Assets/Linterna/Linterna.obj", L"Assets/Linterna/Linterna.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -20);
+		llanta = new ModeloRR(d3dDevice, d3dContext, "Assets/Llanta/Llanta.obj", L"Assets/Llanta/Llanta.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -35, -20);
 
 		fullvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_full.png");
 		halfvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_2.png");
@@ -339,6 +343,8 @@ public:
 		campaña->Draw(camara->vista, camara->proyeccion, terreno->Superficie(campaña->getPosX(), campaña->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		rhino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(rhino->getPosX(), rhino->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		serpiente->Draw(camara->vista, camara->proyeccion, terreno->Superficie(serpiente->getPosX(), serpiente->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		linterna->Draw(camara->vista, camara->proyeccion, terreno->Superficie(linterna->getPosX(), linterna->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		llanta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(llanta->getPosX(), llanta->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 
 		if (!vehiculo) {
 
