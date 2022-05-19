@@ -37,6 +37,8 @@ private:
 	ID3D11ShaderResourceView* normalMap;
 	ID3D11ShaderResourceView* colorMap2;
 	ID3D11ShaderResourceView* normalMap2;
+	ID3D11ShaderResourceView* colorMap3;
+	ID3D11ShaderResourceView* normalMap3;
 	ID3D11ShaderResourceView* blendMap;
 	ID3D11SamplerState* colorMapSampler;
 
@@ -60,7 +62,7 @@ private:
 	ID3D11DeviceContext* d3dContext;
 
 public:
-	TerrenoRR(int ancho, int alto, ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, WCHAR* heightTex, WCHAR* difuseTex1, WCHAR* normalTex1, WCHAR* difuseTex2, WCHAR* normalTex2, WCHAR* blendMapTex)
+	TerrenoRR(int ancho, int alto, ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, WCHAR* heightTex, WCHAR* difuseTex1, WCHAR* normalTex1, WCHAR* difuseTex2, WCHAR* normalTex2, WCHAR* difuseTex3, WCHAR* normalTex3, WCHAR* blendMapTex)
 	{
 		//copiamos el device y el device context a la clase terreno
 		d3dContext = D3DContext;
@@ -69,7 +71,7 @@ public:
 		this->ancho = ancho;
 		this->alto = alto;
 		//aqui cargamos las texturas de alturas y el cesped
-		CargaParametros(heightTex, difuseTex1, normalTex1, difuseTex2, normalTex2, blendMapTex, 100.0f);
+		CargaParametros(heightTex, difuseTex1, normalTex1, difuseTex2, normalTex2, difuseTex3, normalTex3, blendMapTex, 100.0f);
 	}
 
 	~TerrenoRR()
@@ -105,7 +107,7 @@ public:
 		return true;
 	}
 
-	bool CargaParametros(WCHAR* heightTex, WCHAR* diffuseTex1,  WCHAR* normalTex1, WCHAR* diffuseTex2, WCHAR* normalTex2, WCHAR* blendMapTex, float tile)
+	bool CargaParametros(WCHAR* heightTex, WCHAR* diffuseTex1,  WCHAR* normalTex1, WCHAR* diffuseTex2, WCHAR* normalTex2, WCHAR* diffuseTex3, WCHAR* normalTex3, WCHAR* blendMapTex, float tile)
 	{
 		HRESULT d3dResult;
 		//carga el mapa de alturas
@@ -251,6 +253,8 @@ public:
 		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, normalTex1, 0, 0, &normalMap, 0);
 		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, diffuseTex2, 0, 0, &colorMap2, 0 );
 		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, normalTex2, 0, 0, &normalMap2, 0);
+		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, diffuseTex3, 0, 0, &colorMap3, 0);
+		d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, normalTex3, 0, 0, &normalMap3, 0);
 		d3dResult = D3DX11CreateShaderResourceViewFromFile( d3dDevice, blendMapTex, 0, 0, &blendMap, 0 );
 
 		if( FAILED( d3dResult ) )
@@ -392,9 +396,11 @@ public:
 		//pasa lo sbuffers al shader
 		d3dContext->PSSetShaderResources( 0, 1, &colorMap );
 		d3dContext->PSSetShaderResources( 1, 1, &colorMap2 );
-		d3dContext->PSSetShaderResources(2, 1, &normalMap);
-		d3dContext->PSSetShaderResources(3, 1, &normalMap2);
-		d3dContext->PSSetShaderResources( 4, 1, &blendMap );
+		d3dContext->PSSetShaderResources(2, 1, &colorMap3);
+		d3dContext->PSSetShaderResources(3, 1, &normalMap);
+		d3dContext->PSSetShaderResources(4, 1, &normalMap2);
+		d3dContext->PSSetShaderResources(5, 1, &normalMap3);
+		d3dContext->PSSetShaderResources( 6, 1, &blendMap );
 		d3dContext->PSSetSamplers( 0, 1, &colorMapSampler );
 
 		//mueve la camara

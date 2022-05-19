@@ -100,7 +100,7 @@ public:
 		arriaba = 0;
 		billCargaFuego();
 		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
-		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext, L"Assets/Terreno/alturas.jpg", L"Assets/Terreno/ugsnfawlw_2K_Albedo.jpg", L"Assets/Terreno/ugsnfawlw_2K_Albedo.jpg"/*normal*/, L"Assets/Terreno/vckmabus_2K_Albedo.jpg", L"Assets/Terreno/vckmabus_2K_Albedo.jpg"/*normal*/, L"Assets/Terreno/alturas2.jpg");
+		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext, L"Assets/Terreno/alturas.jpg", L"Assets/Terreno/Grass.jpg", L"Assets/Terreno/Grass.jpg"/*normal*/, L"Assets/Terreno/Dirth.jpg", L"Assets/Terreno/Dirth.jpg"/*normal*/, L"Assets/Terreno/GrassDead.jpg", L"Assets/Terreno/GrassDead.jpg"/*normal*/, L"Assets/Terreno/blend2.jpg");
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Assets/SkyDome/noche2.jpg");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png", L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		arbol = new BillboardRR(L"Assets/Billboards/tree.png", L"Assets/Billboards/tree_normal.png", d3dDevice, d3dContext, 5);

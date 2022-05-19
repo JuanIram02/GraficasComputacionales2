@@ -1,8 +1,10 @@
 Texture2D colorMap : register(t0);
 Texture2D colorMap2 : register(t1);
-Texture2D normalMap : register(t2);
-Texture2D normalMap2 : register(t3);
-Texture2D blendMap : register(t4);
+Texture2D colorMap3 : register(t2);
+Texture2D normalMap : register(t3);
+Texture2D normalMap2 : register(t4);
+Texture2D normalMap3 : register(t5);
+Texture2D blendMap : register(t6);
 SamplerState colorSampler : register(s0);
 
 cbuffer cbChangerEveryFrame : register(b0)
@@ -64,8 +66,10 @@ float4 PS_Main(PS_Input pix) : SV_TARGET
 
 	float4 text = colorMap.Sample(colorSampler, pix.tex0);
 	float4 text2 = colorMap2.Sample(colorSampler, pix.tex0);
+    float4 text3 = colorMap3.Sample(colorSampler, pix.tex0);
 	float4 alphaBlend = blendMap.Sample(colorSampler, pix.blendTex);
-	float4 textf = (text * alphaBlend) + ((1.0 - alphaBlend) * text2);
+    float4 textf = lerp(text, text2, alphaBlend.g);
+    textf = lerp(textf, text3, alphaBlend.b);
 
 	float3 DiffuseDirection = float3(0.5f, -1.0f, 0.0f);
 	float4 DiffuseColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
