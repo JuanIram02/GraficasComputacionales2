@@ -391,6 +391,21 @@ public:
 
 		return minutesStr + ":" + secondsStr;
 	}
+
+	string Pos(float pos) {
+		int r = pos;
+		int d = (pos - r) * 1000;
+
+		stringstream rSs, dSs;
+		rSs << r;
+		dSs << d;
+
+		string enteros = rSs.str();
+		string decimales = dSs.str();
+
+		return enteros + "." + decimales;
+	}
+
 };
 
 #endif _Text_
