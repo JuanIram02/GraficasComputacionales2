@@ -11,6 +11,7 @@
 #include "ModeloRR.h"
 #include "XACT3Util.h"
 #include "GUI.h"
+#include "Text.h"
 
 class DXRR{	
 
@@ -59,6 +60,8 @@ public:
 	GUI* fullvida;
 	GUI* halfvida;
 	GUI* lastvida;
+	GUI* gameover;
+	Text* tiempo;
 	
 	float izqder;
 	float arriaba;
@@ -76,14 +79,17 @@ public:
 	bool interactua = 0;
 	int tipoCam;
 	bool vehiculo = 0;
+	float segundos;
+	int hora;
 
 	int vida = 3;
 
 	
-    DXRR(HWND hWnd, int Ancho, int Alto)
+	DXRR(HWND hWnd, int Ancho, int Alto)
 	{
 		rotCam = 0;
 		tipoCam = 1;
+		segundos = 301;
 
 		breakpoint = false;
 		frameBillboard = 0;
@@ -99,29 +105,32 @@ public:
 		izqder = 0;
 		arriaba = 0;
 		billCargaFuego();
-		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
+		camara = new Camara(D3DXVECTOR3(0, 80, 6), D3DXVECTOR3(0, 80, 0), D3DXVECTOR3(0, 1, 0), Ancho, Alto);
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext, L"Assets/Terreno/alturas.jpg", L"Assets/Terreno/Grass.jpg", L"Assets/Terreno/Grass.jpg"/*normal*/, L"Assets/Terreno/Dirth.jpg", L"Assets/Terreno/Dirth.jpg"/*normal*/, L"Assets/Terreno/GrassDead.jpg", L"Assets/Terreno/GrassDead.jpg"/*normal*/, L"Assets/Terreno/blend2.jpg");
-		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Assets/SkyDome/noche2.jpg");
+		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Assets/SkyDome/dia.png");
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png", L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		arbol = new BillboardRR(L"Assets/Billboards/tree.png", L"Assets/Billboards/tree_normal.png", d3dDevice, d3dContext, 5);
 
-		
 		botella = new ModeloRR(d3dDevice, d3dContext, "Assets/Botella/botella.obj", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", -15, -10);
 		person = new ModeloRR(d3dDevice, d3dContext, "Assets/Humana/Vaquera.obj", L"Assets/Humana/Vaquera.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -30);
 		kit = new ModeloRR(d3dDevice, d3dContext, "Assets/Kit/kit.obj", L"Assets/Kit/kit.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -20);
 		tanque = new ModeloRR(d3dDevice, d3dContext, "Assets/Tanque/tanque.obj", L"Assets/Tanque/tanque.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -40);
 		jeep = new ModeloRR(d3dDevice, d3dContext, "Assets/Jeep/jeep.obj", L"Assets/Jeep/jeep.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -50);
-		elefante = new ModeloRR(d3dDevice, d3dContext, "Assets/Elefante/elefante.obj", L"Assets/Elefante/elefante.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -70);
-		tent = new ModeloRR(d3dDevice, d3dContext, "Assets/Tent/Tent.obj", L"Assets/Tent/Tent.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -35, -70);
+		elefante = new ModeloRR(d3dDevice, d3dContext, "Assets/Elefante/elefante.obj", L"Assets/Elefante/elefante.jpg", L"Assets/Elefante/elefanteN.jpg", L"Assets/noSpecMap.jpg", -15, -70);
+		tent = new ModeloRR(d3dDevice, d3dContext, "Assets/Tent/Tent.obj", L"Assets/Tent/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -35, -70);
 		campaña = new ModeloRR(d3dDevice, d3dContext, "Assets/Campaña/Campaña.obj", L"Assets/Campaña/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -90);
-		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -120);
+		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/Rhino/RhinoN.jpg", L"Assets/noSpecMap.jpg", -15, -120);
 		serpiente = new ModeloRR(d3dDevice, d3dContext, "Assets/Serpiente/Serpiente.obj", L"Assets/Serpiente/Serpiente.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -120);
 		linterna = new ModeloRR(d3dDevice, d3dContext, "Assets/Linterna/Linterna.obj", L"Assets/Linterna/Linterna.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -20);
-		llanta = new ModeloRR(d3dDevice, d3dContext, "Assets/Llanta/Llanta.obj", L"Assets/Llanta/Llanta.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -35, -20);
+		llanta = new ModeloRR(d3dDevice, d3dContext, "Assets/Llanta/Llanta.obj", L"Assets/Llanta/Llanta.png", L"Assets/Llanta/LlantaN.png", L"Assets/noSpecMap.jpg", -35, -20);
+
 
 		fullvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_full.png");
 		halfvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_2.png");
 		lastvida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/GUI/health_1.png");
+		gameover = new GUI(d3dDevice, d3dContext, 1.0, 1.0, L"Assets/GUI/gameover.png");
+	
+		tiempo = new Text(d3dDevice, d3dContext, 4.6, 2.2, L"Assets/GUI/font.jpg", XMFLOAT4(0.39f, 0.79f, 0.18f, 1.0f));
 
 	}
 
@@ -293,6 +302,8 @@ public:
 			bool x = false;
 		}
 
+		skydome->hora;
+
 		rotCam += izqder;
 
 		float sphere[3] = { 0,0,0 };
@@ -366,10 +377,7 @@ public:
 				terreno->Superficie(jeep->getPosX(), jeep->getPosZ()) + 2.5,
 				camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, true, tipoCam);
 
-		}
-
-		
-
+		}	
 
 		//carro->setPosX(camara->hdveo.x);
 		//carro->setPosZ(camara->hdveo.z);
@@ -387,8 +395,17 @@ public:
 			lastvida->Draw(-.8, .8);
 		}
 
-		swapChain->Present( 1, 0 );
+		if (segundos < .02) {
+			gameover->Draw(0,0);
+		}
+		else {
+			segundos -= 0.02;
+		}
+
+		tiempo->DrawText(0.4, 0.85, "Anochecer: " + tiempo->Time(segundos), 0.015);	
 		interactua = 0;
+
+		swapChain->Present( 1, 0 );		
 	}
 
 	bool isPointInsideSphere(float* point, float* sphere) {

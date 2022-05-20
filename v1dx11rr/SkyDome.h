@@ -1,3 +1,5 @@
+//Skydome.h
+
 #ifndef _skydome
 #define _skydome
 
@@ -21,10 +23,22 @@ struct MatrixType
 	D3DXVECTOR4 valores;
 };
 
+struct SkydomeText
+{
+	float porciento;
+	float hora;
+	float extra;
+	float extra2;
+};
+
+ID3D11Buffer* textSkyB;
+SkydomeText* Skycontrol;
+
 class SkyDome
 {
 public:
 	float gamepad;
+	float hora;
 private:
 	ID3D11VertexShader* solidColorVS;
 	ID3D11PixelShader* solidColorPS;
@@ -34,6 +48,8 @@ private:
 	ID3D11Buffer* indexBuffer;
 
 	ID3D11ShaderResourceView* textura;
+	ID3D11ShaderResourceView* Atardecer;
+	ID3D11ShaderResourceView* noche;
 	ID3D11SamplerState* texSampler;
 
 	ID3D11Buffer* matrixBufferCB;
@@ -164,15 +180,15 @@ public:
 		{
 			for (int y = 0; y < stacks; y++)
 			{
-				float u = (float)(((double)((dx - x)*0.5f) / dx) *
+				float u = (float)(((double)((dx - x) * 0.5f) / dx) *
 					sin(D3DX_PI * y * 2.0f / dx)) + 0.5f;
-				float v = (float)(((double)((dy - x)*0.5f) / dy) *
+				float v = (float)(((double)((dy - x) * 0.5f) / dy) *
 					cos(D3DX_PI * y * 2.0 / dy)) + 0.5f;
 
 				int indiceArreglo = x * slices + y;
-				vertices[indiceArreglo].pos = D3DXVECTOR3((float)(radio*cos(((double)x / dx)* D3DX_PI / 2) *
-					cos(2.0 * D3DX_PI * (double)y / dx)), (float)(radio*sin(((double)x / dx) * D3DX_PI / 2)),
-					(float)(radio*cos(((double)x / dy) * D3DX_PI / 2)*sin(2.0f * D3DX_PI * (double)y / dy)));
+				vertices[indiceArreglo].pos = D3DXVECTOR3((float)(radio * cos(((double)x / dx) * D3DX_PI / 2) *
+					cos(2.0 * D3DX_PI * (double)y / dx)), (float)(radio * sin(((double)x / dx) * D3DX_PI / 2)),
+					(float)(radio * cos(((double)x / dy) * D3DX_PI / 2) * sin(2.0f * D3DX_PI * (double)y / dy)));
 				vertices[indiceArreglo].UV = D3DXVECTOR2(u, v);
 			}
 		}
@@ -195,9 +211,45 @@ public:
 		}
 		delete vertices;
 
+
+
+		CD3D11_BUFFER_DESC constDesc1;
+		ZeroMemory(&constDesc1, sizeof(constDesc1));
+		constDesc1.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		constDesc1.ByteWidth = sizeof(SkydomeText);
+		constDesc1.Usage = D3D11_USAGE_DEFAULT;
+
+		d3dResult = (*d3dDevice)->CreateBuffer(&constDesc1, 0, &textSkyB);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
+		Skycontrol = new SkydomeText;
+		Skycontrol->porciento = 0.0;
+		Skycontrol->hora = 0;
+		Skycontrol->extra = 0;
+		Skycontrol->extra2 = 0;
+
+
 		creaIndices();
 
 		d3dResult = D3DX11CreateShaderResourceViewFromFile((*d3dDevice), diffuseTex, 0, 0, &textura, 0);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
+		d3dResult = D3DX11CreateShaderResourceViewFromFile((*d3dDevice), L"Assets/SkyDome/atardecer.png", 0, 0, &Atardecer, 0);
+
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
+		d3dResult = D3DX11CreateShaderResourceViewFromFile((*d3dDevice), L"Assets/SkyDome/noche2.jpg", 0, 0, &noche, 0);
 
 		if (FAILED(d3dResult))
 		{
@@ -245,6 +297,7 @@ public:
 			texSampler->Release();
 		if (textura)
 			textura->Release();
+
 		if (solidColorVS)
 			solidColorVS->Release();
 		if (solidColorPS)
@@ -284,6 +337,52 @@ public:
 		unsigned int stride = sizeof(SkyComponent);
 		unsigned int offset = 0;
 
+		if (Skycontrol->hora > 12)
+		{
+			Skycontrol->hora = 0;
+			Skycontrol->porciento = 0;
+			Skycontrol->extra = 0;
+		}
+
+		Skycontrol->hora += 0.0008;
+
+		if (Skycontrol->hora > 1 && Skycontrol->hora < 2)
+		{
+			if (Skycontrol->porciento < 1)
+			{
+				Skycontrol->porciento += 0.0008;
+			}
+
+		}
+
+		if (Skycontrol->hora > 2 && Skycontrol->hora < 3)
+		{
+			if (Skycontrol->extra < 1)
+			{
+				Skycontrol->extra += 0.0008;
+			}
+
+		}
+
+		if (Skycontrol->hora > 9 && Skycontrol->hora < 11)
+		{
+			if (Skycontrol->extra > 0)
+			{
+				Skycontrol->extra -= 0.0008;
+			}
+
+		}
+
+		if (Skycontrol->hora > 11 && Skycontrol->hora < 15)
+		{
+			if (Skycontrol->porciento > 0)
+			{
+				Skycontrol->porciento -= 0.0008;
+			}
+		}
+
+
+
 		(*d3dContext)->IASetInputLayout(inputLayout);
 		(*d3dContext)->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		(*d3dContext)->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
@@ -292,6 +391,8 @@ public:
 		(*d3dContext)->VSSetShader(solidColorVS, 0, 0);
 		(*d3dContext)->PSSetShader(solidColorPS, 0, 0);
 		(*d3dContext)->PSSetShaderResources(0, 1, &textura);
+		(*d3dContext)->PSSetShaderResources(1, 1, &Atardecer);
+		(*d3dContext)->PSSetShaderResources(2, 1, &noche);
 		(*d3dContext)->PSSetSamplers(0, 1, &texSampler);
 
 		D3DXMATRIX worldMat;
@@ -300,15 +401,19 @@ public:
 		matrices->worldMatrix = worldMat;
 
 		(*d3dContext)->UpdateSubresource(matrixBufferCB, 0, 0, matrices, sizeof(MatrixType), 0);
+		(*d3dContext)->UpdateSubresource(textSkyB, 0, 0, Skycontrol, sizeof(SkydomeText), 0);
 		(*d3dContext)->VSSetConstantBuffers(0, 1, &matrixBufferCB);
+		(*d3dContext)->PSSetConstantBuffers(1, 1, &textSkyB);
 
 		(*d3dContext)->DrawIndexed(cantIndex, 0, 0);
+
+		hora = Skycontrol->hora;
 	}
 
 private:
 	void creaIndices()
 	{
-		cantIndex = (slices - 1)*(stacks - 1) * 6;
+		cantIndex = (slices - 1) * (stacks - 1) * 6;
 		indices = new short[cantIndex];
 		int counter = 0;
 		for (int i = 0; i < slices - 1; i++)
@@ -317,8 +422,8 @@ private:
 			{
 				int lowerLeft = j + i * stacks;
 				int lowerRight = (j + 1) + i * stacks;
-				int topLeft = j + (i + 1)*stacks;
-				int topRight = (j + 1) + (i + 1)*stacks;
+				int topLeft = j + (i + 1) * stacks;
+				int topRight = (j + 1) + (i + 1) * stacks;
 
 				indices[counter++] = lowerLeft;
 				indices[counter++] = lowerRight;

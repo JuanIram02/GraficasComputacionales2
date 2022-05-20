@@ -85,7 +85,7 @@ public:
 		return sphere;
 	}
 
-	ModeloRR(ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, char* ModelPath, WCHAR* colorTexturePath, WCHAR* specularTexturePath, WCHAR* normalTexturePath, float _posX, float _posZ)
+	ModeloRR(ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, char* ModelPath, WCHAR* colorTexturePath, WCHAR* normalTexturePath, WCHAR* specularTexturePath, float _posX, float _posZ)
 	{
 		//copiamos el device y el device context a la clase terreno
 		d3dContext = D3DContext;
