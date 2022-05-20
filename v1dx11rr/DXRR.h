@@ -44,11 +44,11 @@ public:
 	TerrenoRR *terreno;
 	SkyDome *skydome;
 
-	BillboardRR* billboard;
-	BillboardRR* arbol;
+	BillboardRR* arbusto;
+	BillboardRR* arbol3;
+	BillboardRR* arbol8;
 	
 	ModeloRR* botella;
-	ModeloRR* person;
 	ModeloRR* kit;
 	ModeloRR* tanque;
 	ModeloRR* jeep;
@@ -59,6 +59,9 @@ public:
 	ModeloRR* serpiente;
 	ModeloRR* linterna;
 	ModeloRR* llanta;
+	ModeloRR* hipo;
+	ModeloRR* leon;
+	ModeloRR* coco;
 
 	ModeloRR* agua;
 
@@ -93,7 +96,9 @@ public:
 	bool tanqueB = 0;
 	bool botellaB = 0;
 
-	int vida = 3;
+	bool win = 0;
+
+	float vida = 3;
 
 	
 	DXRR(HWND hWnd, int Ancho, int Alto)
@@ -117,26 +122,30 @@ public:
 		arriaba = 0;
 		billCargaFuego();
 		camara = new Camara(D3DXVECTOR3(0, 80, 6), D3DXVECTOR3(0, 80, 0), D3DXVECTOR3(0, 1, 0), Ancho, Alto);
-		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext, L"Assets/Terreno/alturas3.jpg", L"Assets/Terreno/Grass.jpg", L"Assets/Terreno/Grass.jpg"/*normal*/, L"Assets/Terreno/Dirth.jpg", L"Assets/Terreno/Dirth.jpg"/*normal*/, L"Assets/Terreno/GrassDead.jpg", L"Assets/Terreno/GrassDead.jpg"/*normal*/, L"Assets/Terreno/mapa1.png");
+		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext, L"Assets/Terreno/alturas3.jpg", L"Assets/Terreno/Grass.jpg", L"Assets/Terreno/Grass.jpg"/*normal*/, L"Assets/Terreno/Dirth.jpg", L"Assets/Terreno/Dirth.jpg"/*normal*/, L"Assets/Terreno/GrassDead.jpg", L"Assets/Terreno/GrassDead.jpg"/*normal*/, L"Assets/Terreno/alturas3.png");
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"Assets/SkyDome/dia.png");
 
 		//----------------------------BILLBOARDS--------------------------------
-		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png", L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
-		arbol = new BillboardRR(L"Assets/Billboards/tree.png", L"Assets/Billboards/tree_normal.png", d3dDevice, d3dContext, 5);
+		arbusto = new BillboardRR(L"Assets/Billboards/arbusto.png", L"Assets/Billboards/arbustoN.png", d3dDevice, d3dContext, 5);
+		arbol3 = new BillboardRR(L"Assets/Billboards/arbol3.png", L"Assets/Billboards/arbol3N.png", d3dDevice, d3dContext, 5);
+		arbol8 = new BillboardRR(L"Assets/Billboards/arbol8.png", L"Assets/noSpecMap.jpg", d3dDevice, d3dContext, 5);
+
 
 		//------------------------------MODELS-------------------------------
-		botella = new ModeloRR(d3dDevice, d3dContext, "Assets/Botella/botella.obj", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", -15, -10);
-		person = new ModeloRR(d3dDevice, d3dContext, "Assets/Humana/Vaquera.obj", L"Assets/Humana/Vaquera.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -30);
-		kit = new ModeloRR(d3dDevice, d3dContext, "Assets/Kit/kit.obj", L"Assets/Kit/kit.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -20);
-		tanque = new ModeloRR(d3dDevice, d3dContext, "Assets/Tanque/tanque.obj", L"Assets/Tanque/tanque.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -17, 19);
-		jeep = new ModeloRR(d3dDevice, d3dContext, "Assets/Jeep/jeep.obj", L"Assets/Jeep/jeep3.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -15, -50);
-		elefante = new ModeloRR(d3dDevice, d3dContext, "Assets/Elefante/elefante.obj", L"Assets/Elefante/elefante.jpg", L"Assets/Elefante/elefanteN.jpg", L"Assets/noSpecMap.jpg", -15, -70);
+		botella = new ModeloRR(d3dDevice, d3dContext, "Assets/Botella/botella.obj", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", L"Assets/Botella/botella.png", -107, 9);
+		kit = new ModeloRR(d3dDevice, d3dContext, "Assets/Kit/kit.obj", L"Assets/Kit/kit.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -107, -106);
+		tanque = new ModeloRR(d3dDevice, d3dContext, "Assets/Tanque/tanque.obj", L"Assets/Tanque/tanque.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", 91, -22);
+		jeep = new ModeloRR(d3dDevice, d3dContext, "Assets/Jeep/jeep.obj", L"Assets/Jeep/jeep3.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -30, -22);
+		elefante = new ModeloRR(d3dDevice, d3dContext, "Assets/Elefante/elefante.obj", L"Assets/Elefante/elefante.jpg", L"Assets/Elefante/elefanteN.jpg", L"Assets/noSpecMap.jpg", 44, 77);
 		tent = new ModeloRR(d3dDevice, d3dContext, "Assets/Tent/Tent.obj", L"Assets/Tent/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -103, -108);
 		campaña = new ModeloRR(d3dDevice, d3dContext, "Assets/Campaña/Campaña.obj", L"Assets/Campaña/campaña.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -56, 110);
-		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/Rhino/RhinoN.jpg", L"Assets/noSpecMap.jpg", -15, -120);
-		serpiente = new ModeloRR(d3dDevice, d3dContext, "Assets/Serpiente/Serpiente.obj", L"Assets/Serpiente/Serpiente.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -120);
-		linterna = new ModeloRR(d3dDevice, d3dContext, "Assets/Linterna/Linterna.obj", L"Assets/Linterna/Linterna.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -25, -20);
-		llanta = new ModeloRR(d3dDevice, d3dContext, "Assets/Llanta/Llanta.obj", L"Assets/Llanta/Llanta.png", L"Assets/Llanta/LlantaN.png", L"Assets/noSpecMap.jpg", -35, -20);
+		rhino = new ModeloRR(d3dDevice, d3dContext, "Assets/Rhino/Rhino.obj", L"Assets/Rhino/Rhino.jpg", L"Assets/Rhino/RhinoN.jpg", L"Assets/noSpecMap.jpg", 96, -112);
+		serpiente = new ModeloRR(d3dDevice, d3dContext, "Assets/Serpiente/Serpiente.obj", L"Assets/Serpiente/Serpiente.jpg", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", -98, 7);
+		linterna = new ModeloRR(d3dDevice, d3dContext, "Assets/Linterna/Linterna.obj", L"Assets/Linterna/Linterna.png", L"Assets/noSpecMap.jpg", L"Assets/noSpecMap.jpg", 111, -107);
+		llanta = new ModeloRR(d3dDevice, d3dContext, "Assets/Llanta/Llanta.obj", L"Assets/Llanta/Llanta.png", L"Assets/Llanta/LlantaN.png", L"Assets/noSpecMap.jpg", -52, 110);
+		hipo = new ModeloRR(d3dDevice, d3dContext, "Assets/Hipo/hipo.obj", L"Assets/Hipo/hipo.jpg", L"Assets/Hipo/hipoN.jpg", L"Assets/noSpecMap.jpg", 47, -57);
+		leon = new ModeloRR(d3dDevice, d3dContext, "Assets/Leon/leon.obj", L"Assets/Leon/leon.jpg", L"Assets/Leon/leonN.jpg", L"Assets/noSpecMap.jpg", 65, 32);
+		coco = new ModeloRR(d3dDevice, d3dContext, "Assets/Cocodrilo/cocodrilo.obj", L"Assets/Cocodrilo/cocodrilo.jpg", L"Assets/Cocodrilo/cocodriloN.jpg", L"Assets/noSpecMap.jpg", -56, -85);
 
 		agua = new ModeloRR(d3dDevice, d3dContext, "Assets/Agua/agua.obj", L"Assets/Agua/agua.jpg", L"Assets/Agua/aguaN.jpg", L"Assets/noSpecMap.jpg", 100, -110);
 
@@ -348,19 +357,35 @@ public:
 		skydome->Render(camara->posCam);
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
-		//TurnOnAlphaBlending();
-		billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
-			-25, 10, 14, 5, uv1, uv2, uv3, uv4, frameBillboard, true);
 
-		arbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
-			-25, 10, 14, 5, uv1, uv2, uv3, uv4, frameBillboard, false);
+		arbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			35, 76, 3, 4, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+		arbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			42, -56, 1.5, 2, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+		arbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			96, -105, 3, 2, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+		arbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			35, 76, 5, 4, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+		arbol3->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			-14, 6, 4.5, 20, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+		arbol8->Draw(camara->vista, camara->proyeccion, camara->posCam,
+			85, -24, 6, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
 
 		//TurnOffAlphaBlending();
 		elefante->Draw(camara->vista, camara->proyeccion, terreno->Superficie(elefante->getPosX(), elefante->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 		tent->Draw(camara->vista, camara->proyeccion, terreno->Superficie(tent->getPosX(), tent->getPosZ()), camara->posCam, 10.0f, XM_PI, 'Y', 1, false, tipoCam);
 		campaña->Draw(camara->vista, camara->proyeccion, terreno->Superficie(campaña->getPosX(), campaña->getPosZ()), camara->posCam, 10.0f, 3 * XM_PI, 'Y', 1, false, tipoCam);
-		rhino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(rhino->getPosX(), rhino->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
-		serpiente->Draw(camara->vista, camara->proyeccion, terreno->Superficie(serpiente->getPosX(), serpiente->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		rhino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(rhino->getPosX(), rhino->getPosZ()), camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, false, tipoCam);
+		serpiente->Draw(camara->vista, camara->proyeccion, terreno->Superficie(serpiente->getPosX(), serpiente->getPosZ()), camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, false, tipoCam);
+		hipo->Draw(camara->vista, camara->proyeccion, terreno->Superficie(hipo->getPosX(), hipo->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		leon->Draw(camara->vista, camara->proyeccion, terreno->Superficie(leon->getPosX(), leon->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
+		coco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(coco->getPosX(), coco->getPosZ()), camara->posCam, 10.0f, XM_PI, 'Y', 1, false, tipoCam);
+
 		//agua->Draw(camara->vista, camara->proyeccion, 0, camara->posCam, 10.0f, 0, 'A', 1, false, tipoCam);
 
 		//-----------------------Colisiones---------------------
@@ -370,7 +395,7 @@ public:
 
 			if (isPointInsideSphere(camara->getPos(), jeep->getSphere(5))) {
 				camara->posCam = camara->pastPosCam;
-				if (interactua && llantaB) {
+				if (interactua && llantaB && tanqueB) {
 					vehiculo = 1;
 				}
 			}
@@ -440,38 +465,71 @@ public:
 			}
 		}
 
+		if (isPointInsideSphere(camara->getPos(), elefante->getSphere(6))) {
+			camara->posCam = camara->pastPosCam;
+			vida -= .03;
+		}
+
+		if (isPointInsideSphere(camara->getPos(), rhino->getSphere(5))) {
+			camara->posCam = camara->pastPosCam;
+			vida -= .03;
+		}
+
+		if (isPointInsideSphere(camara->getPos(), hipo->getSphere(5))) {
+			camara->posCam = camara->pastPosCam;
+			vida -= .03;
+		}
+
+		if (isPointInsideSphere(camara->getPos(), coco->getSphere(6))) {
+			camara->posCam = camara->pastPosCam;
+			vida -= .03;
+		}
+
+		if (isPointInsideSphere(camara->getPos(), serpiente->getSphere(3))) {
+			camara->posCam = camara->pastPosCam;
+			vida -= .03;
+		}
+
 		//---------------------------GUI------------------------
 
-		if (vida == 3) {
+		if (vida = 3) {
 			fullvida->Draw(-.8, .8);
 		} 
-		else if (vida == 2) {
+		else if (vida < 3) {
 			halfvida->Draw(-.8, .8);
 		}
-		else if (vida == 1) {
+		else if (vida < 2) {
 			lastvida->Draw(-.8, .8);
 		}
 
-		if (segundos < .02) {
+		if (segundos < .02 || vida < 0) {
 			gameover->Draw(0,0);
 		}
 		else {
+			if(!win)
 			segundos -= 0.02;
 		}
 
 		text->DrawText(0.4, 0.85, "Anochecer: " + text->Time(segundos), 0.015);
 
-		text->DrawText(-0.95, -0.30, "Cosas a recuperar:", 0.015);
-		if(!llantaB)
-			text->DrawText(-0.95, -0.40, "Llanta", 0.015);
-		if (!tanqueB)
-			text->DrawText(-0.95, -0.50, "Gasolina", 0.015);
-		if (!kitB)
-			text->DrawText(-0.95, -0.60, "Botiquin", 0.015);
-		if (!botellaB)
-			text->DrawText(-0.95, -0.70, "Agua", 0.015);
-		if (!linternaB)
-			text->DrawText(-0.95, -0.80, "Linterna", 0.015);
+		if (llantaB && tanqueB && kitB && botellaB && linternaB) {
+			win = true;
+			text->DrawText(-0.95, -0.80, "Recuperaste todo lo necesario", 0.015);
+		}
+		else {
+
+			text->DrawText(-0.95, -0.30, "Cosas a recuperar:", 0.015);
+			if (!llantaB)
+				text->DrawText(-0.95, -0.40, "Llanta", 0.015);
+			if (!tanqueB)
+				text->DrawText(-0.95, -0.50, "Gasolina", 0.015);
+			if (!kitB)
+				text->DrawText(-0.95, -0.60, "Botiquin", 0.015);
+			if (!botellaB)
+				text->DrawText(-0.95, -0.70, "Agua", 0.015);
+			if (!linternaB)
+				text->DrawText(-0.95, -0.80, "Linterna", 0.015);
+		}
 
 		text->DrawText(-0.20, -0.80, "PosX:" + text->Pos(camara->posCam.x) + " PosZ:" + text->Pos(camara->posCam.z), 0.015);
 
