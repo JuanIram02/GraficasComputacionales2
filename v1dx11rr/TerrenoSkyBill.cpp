@@ -200,7 +200,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
             if (keyboardData[DIK_B] & 0x80) {
                 dxrr->breakpoint = true;
-                dxrr->camara->posCam;
             }
 
             if (keyboardData[DIK_T] & 0x80) {
