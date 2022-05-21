@@ -98,7 +98,7 @@ public:
 
 	bool win = 0;
 
-	float vida = 3;
+	float vida = 4;
 
 	
 	DXRR(HWND hWnd, int Ancho, int Alto)
@@ -467,42 +467,42 @@ public:
 
 		if (isPointInsideSphere(camara->getPos(), elefante->getSphere(6))) {
 			camara->posCam = camara->pastPosCam;
-			vida -= .03;
+			vida -= 0.03;
 		}
 
 		if (isPointInsideSphere(camara->getPos(), rhino->getSphere(5))) {
 			camara->posCam = camara->pastPosCam;
-			vida -= .03;
+			vida -= 0.03;
 		}
 
 		if (isPointInsideSphere(camara->getPos(), hipo->getSphere(5))) {
 			camara->posCam = camara->pastPosCam;
-			vida -= .03;
+			vida -= 0.03;
 		}
 
 		if (isPointInsideSphere(camara->getPos(), coco->getSphere(6))) {
 			camara->posCam = camara->pastPosCam;
-			vida -= .03;
+			vida -= 0.03;
 		}
 
 		if (isPointInsideSphere(camara->getPos(), serpiente->getSphere(3))) {
 			camara->posCam = camara->pastPosCam;
-			vida -= .03;
+			vida -= 0.03;
 		}
 
 		//---------------------------GUI------------------------
 
-		if (vida = 3) {
+		if (vida > 3) {
 			fullvida->Draw(-.8, .8);
 		} 
-		else if (vida < 3) {
+		if (vida < 3 && vida >= 2) {
 			halfvida->Draw(-.8, .8);
 		}
-		else if (vida < 2) {
+		if (vida < 2) {
 			lastvida->Draw(-.8, .8);
 		}
 
-		if (segundos < .02 || vida < 0) {
+		if (segundos < .02 || vida < 1) {
 			gameover->Draw(0,0);
 		}
 		else {
